@@ -3,6 +3,7 @@ package main
 import (
 	. "./driver"
 	. "fmt"
+	. "strconv"
 	"time"
 )
 
@@ -43,7 +44,7 @@ func main() {
 	Speed(150)
 	time.Sleep(25 * time.Millisecond)
 
-	go send_to_floor(2, 1)
+	go send_to_floor(0, 2)
 
 	neverQuit := make(chan string)
 	<-neverQuit
