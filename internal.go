@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var last_floor int = Get_floor_sensor()
+var last_floor int
 
 func send_to_floor_2(ch1 chan int) {
 
@@ -61,13 +61,26 @@ func UserInput(ch chan int) {
 	}
 }
 
+func go_to_first_floor() {
+	for {
+		Speed(-150)
+		if Get_floor_sensor() == 0 {
+			time.Sleep(25 * time.Millisecond)
+			Speed(0)
+			break
+		}
+	}
+}
+
 func main() {
 
 	//channels
 	ch1 := make(chan int)
+	last_floor = Get_floor_sensor()
 
 	// Initialize
 	Init()
+	go_to_first_floor()
 
 	go UserInput(ch1)
 	go send_to_floor_2(ch1)
