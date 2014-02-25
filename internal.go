@@ -15,6 +15,7 @@ func send_to_floor(floor, last_floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: ")
 				Println(Get_floor_sensor())
+				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -27,6 +28,7 @@ func send_to_floor(floor, last_floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: ")
 				Println(Get_floor_sensor())
+				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -41,7 +43,7 @@ func main() {
 	Speed(150)
 	time.Sleep(25 * time.Millisecond)
 
-	go send_to_floor(1, 2)
+	go send_to_floor(2, 1)
 
 	neverQuit := make(chan string)
 	<-neverQuit
