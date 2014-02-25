@@ -28,7 +28,7 @@ func main() {
 
 	// Stop at nearest floor
 	last_floor := -1
-
-	send_to_floor(2, last_floor)
+	Speed(-150)
+	//send_to_floor(2, last_floor)
 
 }
