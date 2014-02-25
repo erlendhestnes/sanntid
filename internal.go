@@ -24,7 +24,6 @@ func main() {
 
 	// Initialize
 	Init()
-	Speed(150)
 
 	// Stop at nearest floor
 	//last_floor := -1
