@@ -100,7 +100,7 @@ func main() {
 	Set_stop_lamp(1)
 
 	go UserInput(ch1)
-	go order(ch1)
+	go wait_for_input(ch1)
 
 	neverQuit := make(chan string)
 	<-neverQuit
