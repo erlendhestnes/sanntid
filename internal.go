@@ -7,17 +7,17 @@ import (
 	"time"
 )
 
-var last_floor int
+var current_floor int
 
-func send_to_floor_2(ch1 chan int) {
+func wait_for_input(ch1 chan int) {
 
 	for {
 		select {
 		case floor := <-ch1:
-			last_floor = Get_floor_sensor()
+			current_floor = Get_floor_sensor()
 			Println("Going to floor : " + Itoa(floor))
-			Println("From previous floor : " + Itoa(last_floor))
-			send_to_floor(floor, last_floor)
+			Println("From previous floor : " + Itoa(current_floor))
+			send_to_floor(floor, current_floor)
 		default:
 			time.Sleep(25 * time.Millisecond)
 		}
@@ -25,14 +25,13 @@ func send_to_floor_2(ch1 chan int) {
 
 }
 
-func send_to_floor(floor, last_floor int) {
-	if last_floor < floor {
+func send_to_floor(floor, current_floor int) {
+	if current_floor < floor {
 		Println("Going up")
 		for {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				//time.Sleep(50 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -43,7 +42,6 @@ func send_to_floor(floor, last_floor int) {
 			Speed(-150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				//time.Sleep(50 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -70,7 +68,7 @@ func main() {
 	Speed(0)
 
 	go UserInput(ch1)
-	go send_to_floor_2(ch1)
+	go wait_for_input(ch1)
 
 	neverQuit := make(chan string)
 	<-neverQuit
