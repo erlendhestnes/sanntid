@@ -33,7 +33,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				//Set_floor_indicator(Get_floor_sensor())
+				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
@@ -45,7 +45,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(-150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				//Set_floor_indicator(Get_floor_sensor())
+				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
@@ -71,14 +71,14 @@ func order(ch1 chan int) {
 
 		if i < 3 {
 			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
-				Println("Button nr: " + Itoa(i) + " has been pressed!")
+				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
 		if i > 0 {
 			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
-				Println("Button nr: " + Itoa(i) + " has been pressed!")
+				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
 			}
