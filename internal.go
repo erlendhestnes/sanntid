@@ -1,6 +1,7 @@
 package main
 
 import (
+	. ".././network"
 	. "./driver"
 	. "fmt"
 	. "strconv"
@@ -9,16 +10,13 @@ import (
 
 var current_floor int
 
-func wait_for_input(ch1 chan int) {
+func wait_for_input(ch1 chan int, ch2 chan string) {
 
 	for {
 		select {
 		case floor := <-ch1:
-			Set_stop_lamp(0)
 			current_floor = Get_floor_sensor()
-			Println("Going to floor : " + Itoa(floor))
-			Println("From previous floor : " + Itoa(current_floor))
-			send_to_floor(floor, current_floor)
+			ch2 <- Itoa(floor) + ":" + GetMyIP()
 		default:
 			time.Sleep(25 * time.Millisecond)
 		}
@@ -54,7 +52,7 @@ func send_to_floor(floor, current_floor int) {
 	}
 }
 
-func UserInput(ch chan int) {
+func KeyboardInput(ch chan int) {
 	var a int
 
 	for {
@@ -90,28 +88,19 @@ func order(ch1 chan int) {
 	}
 }
 
-func button_test() {
-	for {
-		if Get_button_signal(BUTTON_COMMAND, 0) == 1 {
-			Println("btn pressed!")
-			time.Sleep(500 * time.Millisecond)
-		}
-	}
-}
-
 func main() {
 
 	//channels
 	ch1 := make(chan int)
+	ch2 := make(chan string)
 
 	// Initialize
 	Init()
 	Speed(0)
 	Set_stop_lamp(1)
 
-	//go button_test()
 	go order(ch1)
-	go wait_for_input(ch1)
+	go wait_for_input(ch1, ch2)
 
 	neverQuit := make(chan string)
 	<-neverQuit
