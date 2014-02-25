@@ -7,16 +7,17 @@ import (
 	"time"
 )
 
-var last_floor int
-
 func send_to_floor_2(ch1 chan int) {
+
+	ch2 := make(chan int)
+	<-ch2 = Get_floor_sensor()
 
 	for {
 		select {
 		case floor := <-ch1:
 			Println("Going to floor : " + Itoa(floor))
-			Println("From previous floor : " + Itoa(last_floor))
-			send_to_floor(floor, last_floor)
+			Println("From previous floor : " + Itoa(<-ch2))
+			send_to_floor(floor, ch2)
 		default:
 			time.Sleep(25 * time.Millisecond)
 		}
@@ -24,15 +25,15 @@ func send_to_floor_2(ch1 chan int) {
 
 }
 
-func send_to_floor(floor, last_floor int) {
-	if last_floor < floor {
+func send_to_floor(floor int, last_floor chan int) {
+	if <-last_floor < floor {
 		Println("Going up")
 		for {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				time.Sleep(25 * time.Millisecond)
-				last_floor = floor
+				<-last_floor = floor
 				Speed(0)
 				break
 			}
@@ -44,7 +45,7 @@ func send_to_floor(floor, last_floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				time.Sleep(25 * time.Millisecond)
-				last_floor = floor
+				<-last_floor = floor
 				Speed(0)
 				break
 			}
