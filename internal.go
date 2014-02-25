@@ -7,11 +7,9 @@ import (
 	"time"
 )
 
-var last_floor int = -1
+var last_floor int = 3
 
-func send_to_floor_2(ch1 chan int, last_floor int) {
-
-	_ = last_floor
+func send_to_floor_2(ch1 chan int) {
 
 	for {
 		select {
