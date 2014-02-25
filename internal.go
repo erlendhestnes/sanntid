@@ -3,6 +3,7 @@ package main
 import (
 	. "./driver"
 	. "fmt"
+	"time"
 )
 
 func send_to_floor(floor, last_floor int) {
