@@ -25,9 +25,11 @@ func main() {
 	// Initialize
 	Init()
 
-	// Stop at nearest floor
-	//last_floor := -1
-	Speed(-150)
-	//send_to_floor(2, last_floor)
+	Speed(150)
+	time.Sleep(25 * time.Millisecond)
+	Speed(0)
+	time.Sleep(1000 * time.Millisecond)
+	Speed(150)
+	time.Sleep(1000 * time.Millisecond)
 
 }
