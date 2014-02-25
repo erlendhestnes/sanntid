@@ -9,6 +9,22 @@ import (
 
 var last_floor int = -1
 
+func send_to_floor_2(ch1 chan int, last_floor int) {
+
+	_ = last_floor
+	
+	for {
+		select {
+			case floor := <- ch1
+				Println(floor)
+
+			default
+				time.Sleep(25 * time.Millisecond)
+		}
+	}
+
+}
+
 func send_to_floor(floor chan int, last_floor int) {
 	if last_floor < <-floor {
 		Println("Going up")
@@ -57,11 +73,10 @@ func main() {
 
 	// Initialize
 	Init()
-	Speed(150)
 	time.Sleep(25 * time.Millisecond)
 
 	go UserInput(ch1)
-	go send_to_floor(ch1, last_floor)
+	go send_to_floor_2(ch1, last_floor)
 
 	neverQuit := make(chan string)
 	<-neverQuit
