@@ -80,7 +80,6 @@ func main() {
 
 	// Initialize
 	Init()
-	go go_to_first_floor()
 
 	go UserInput(ch1)
 	go send_to_floor_2(ch1)
