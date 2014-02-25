@@ -25,12 +25,12 @@ func main() {
 
 	// Initialize
 	Init()
+	for {
+		Speed(150)
+		time.Sleep(25 * time.Millisecond)
 
-	Speed(150)
-	time.Sleep(25 * time.Millisecond)
-	Speed(0)
-	time.Sleep(1000 * time.Millisecond)
-	Speed(150)
-	time.Sleep(1000 * time.Millisecond)
-
+		if Get_floor_sensor() == 2 {
+			break
+		}
+	}
 }
