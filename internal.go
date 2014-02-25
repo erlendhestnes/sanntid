@@ -19,9 +19,6 @@ func send_to_floor(floor, last_floor int) {
 			}
 		}
 	}
-	else {
-		Println("else")
-	}
 }
 
 func main() {
