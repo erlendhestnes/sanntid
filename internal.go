@@ -109,8 +109,8 @@ func main() {
 	Speed(0)
 	Set_stop_lamp(1)
 
-	go button_test()
-	//go order(ch1)
+	//go button_test()
+	go order(ch1)
 	go wait_for_input(ch1)
 
 	neverQuit := make(chan string)
