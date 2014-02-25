@@ -92,6 +92,7 @@ func button_test() {
 	for {
 		if Get_button_signal(BUTTON_COMMAND, 0) == 1 {
 			Println("btn pressed!")
+			time.Sleep(500 * time.Millisecond)
 		}
 	}
 }
