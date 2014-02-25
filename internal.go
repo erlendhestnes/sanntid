@@ -39,6 +39,7 @@ func main() {
 	// Initialize
 	Init()
 	Speed(150)
+	time.Sleep(25 * time.Millisecond)
 
 	go send_to_floor(1, 2)
 
