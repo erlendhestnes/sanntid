@@ -63,7 +63,7 @@ func UserInput(ch chan int) {
 	}
 }
 
-func order(ch2 chan int) {
+func order(ch1 chan int) {
 
 	i := 0
 
@@ -71,13 +71,13 @@ func order(ch2 chan int) {
 
 		if i < 3 {
 			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
-				ch2 <- i
+				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
 		if i > 0 {
 			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
-				ch2 <- i
+				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
@@ -85,6 +85,14 @@ func order(ch2 chan int) {
 		i++
 		i = i % 4
 
+	}
+}
+
+func button_test() {
+	for {
+		if Get_button_signal(BUTTON_COMMAND, 0) {
+			Println("btn pressed!")
+		}
 	}
 }
 
@@ -98,7 +106,8 @@ func main() {
 	Speed(0)
 	Set_stop_lamp(1)
 
-	go order(ch1)
+	go button_test()
+	//go order(ch1)
 	go wait_for_input(ch1)
 
 	neverQuit := make(chan string)
