@@ -8,66 +8,19 @@ import (
 
 func send_to_floor(floor, last_floor int) {
 
-	for {
-
-		floor := Get_floor_sensor()
-		Println("Going to floor nr: " + string(floor))
-
-		switch floor {
-		case 0:
+	if last_floor < floor {
+		for {
 			Speed(150)
-			time.Sleep(25 * time.Millisecond)
-			Speed(0)
-			time.Sleep(1000 * time.Millisecond)
-			Speed(150)
-			time.Sleep(1000 * time.Millisecond)
-			last_floor = floor
-
-		case 1:
-			if last_floor > floor {
-				Speed(150)
-				time.Sleep(25 * time.Millisecond)
-				Speed(0)
-				time.Sleep(1000 * time.Millisecond)
-				Speed(-150)
-				time.Sleep(1000 * time.Millisecond)
-				last_floor = floor
-			} else {
-				Speed(-150)
-				time.Sleep(25 * time.Millisecond)
-				Speed(0)
-				time.Sleep(1000 * time.Millisecond)
-				Speed(150)
-				time.Sleep(1000 * time.Millisecond)
-				last_floor = floor
+			sensor_floor := Get_floor_sensor()
+			Println(string(sensor_floor))
+			if sensor_floor == floor {
+				Println("I am now at floor: " + string(sensor_floor))
+				break
 			}
-		case 2:
-			if last_floor > floor {
-				Speed(150)
-				time.Sleep(25 * time.Millisecond)
-				Speed(0)
-				time.Sleep(1000 * time.Millisecond)
-				Speed(-150)
-				time.Sleep(1000 * time.Millisecond)
-				last_floor = floor
-			} else {
-				Speed(-150)
-				time.Sleep(25 * time.Millisecond)
-				Speed(0)
-				time.Sleep(1000 * time.Millisecond)
-				Speed(150)
-				time.Sleep(1000 * time.Millisecond)
-				last_floor = floor
-			}
-		case 3:
-			Speed(-150)
-			time.Sleep(25 * time.Millisecond)
-			Speed(0)
-			time.Sleep(1000 * time.Millisecond)
-			Speed(-150)
-			time.Sleep(1000 * time.Millisecond)
-			last_floor = floor
 		}
+	}
+	else {
+
 	}
 }
 
@@ -80,6 +33,6 @@ func main() {
 	// Stop at nearest floor
 	last_floor := -1
 
-	go send_to_floor(2, last_floor)
+	send_to_floor(2, last_floor)
 
 }
