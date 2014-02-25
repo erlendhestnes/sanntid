@@ -33,7 +33,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(Get_floor_sensor())
+				//Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
@@ -45,7 +45,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(-150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(Get_floor_sensor())
+				//Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
