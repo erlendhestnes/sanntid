@@ -27,9 +27,11 @@ func test() {
 		floor := Get_floor_sensor()
 		Println(floor)
 
-		if Get_floor_sensor() == 3 {
+		if Get_floor_sensor() == 1 {
+			Println("I am at: ")
 			Println(floor)
-			Speed(-150)
+			Speed(0)
+			time.Sleep(1000 * time.Millisecond)
 		}
 	}
 }
