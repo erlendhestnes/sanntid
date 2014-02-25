@@ -9,7 +9,7 @@ import (
 
 var last_floor int = -1
 
-func send_to_floor(chan floor int, last_floor int) {
+func send_to_floor(floor chan int, last_floor int) {
 	if last_floor < <-floor {
 		Println("Going up")
 		for {
