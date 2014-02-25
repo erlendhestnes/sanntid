@@ -7,12 +7,12 @@ import (
 )
 
 func send_to_floor(floor, last_floor int) {
-	
+
 	for {
 
 		floor := Get_floor_sensor()
 		Println("Going to floor nr: " + floor)
-		
+
 		switch floor {
 		case 0:
 			Speed(150)
@@ -80,6 +80,6 @@ func main() {
 	// Stop at nearest floor
 	last_floor := -1
 
-	go send_to_floor(2, last_floor int)
+	go send_to_floor(2, last_floor)
 
 }
