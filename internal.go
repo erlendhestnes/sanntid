@@ -21,17 +21,27 @@ func send_to_floor(floor, last_floor int) {
 	}
 }
 
-func main() {
-
-	// Initialize
-	Init()
-	Speed(150)
+func test() {
 	for {
-		time.Sleep(25 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
+		Println(string(Get_floor_sensor()))
 
 		if Get_floor_sensor() == 3 {
 			Println(string(Get_floor_sensor()))
 			Speed(-150)
 		}
 	}
+}
+
+func main() {
+
+	// Initialize
+	Init()
+	Speed(150)
+
+	go test()
+
+	neverQuit := make(chan string)
+	<-neverQuit
+
 }
