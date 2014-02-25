@@ -1,8 +1,8 @@
 package main
 
 import (
-	. ".././network"
 	. "./driver"
+	. "./network"
 	. "fmt"
 	. "strconv"
 	"time"
