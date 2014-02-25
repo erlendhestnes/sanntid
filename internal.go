@@ -12,14 +12,13 @@ var last_floor int = -1
 func send_to_floor_2(ch1 chan int, last_floor int) {
 
 	_ = last_floor
-	
+
 	for {
 		select {
-			case floor := <- ch1
-				Println(floor)
-
-			default
-				time.Sleep(25 * time.Millisecond)
+		case floor := <-ch1:
+			Println(floor)
+		default:
+			time.Sleep(25 * time.Millisecond)
 		}
 	}
 
