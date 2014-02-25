@@ -74,7 +74,7 @@ func main() {
 	time.Sleep(25 * time.Millisecond)
 
 	go UserInput(ch1)
-	go send_to_floor_2(ch1, last_floor)
+	go send_to_floor_2(ch1)
 
 	neverQuit := make(chan string)
 	<-neverQuit
