@@ -78,6 +78,7 @@ func main() {
 
 	// Initialize
 	Init()
+	Speed(0)
 
 	go UserInput(ch1)
 	go send_to_floor_2(ch1)
