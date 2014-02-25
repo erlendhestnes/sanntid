@@ -11,7 +11,7 @@ func send_to_floor(floor, last_floor int) {
 	for {
 
 		floor := Get_floor_sensor()
-		Println("Going to floor nr: " + floor)
+		Println("Going to floor nr: " + string(floor))
 
 		switch floor {
 		case 0:
