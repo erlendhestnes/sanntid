@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var last_floor int = 3
+var last_floor int
 
 func send_to_floor_2(ch1 chan int) {
 
@@ -33,7 +33,7 @@ func send_to_floor(floor, last_floor int) {
 				Println("I am now at floor: ")
 				Println(Get_floor_sensor())
 				time.Sleep(25 * time.Millisecond)
-				last_floor = Get_floor_sensor()
+				last_floor = floor
 				Speed(0)
 				break
 			}
@@ -47,7 +47,7 @@ func send_to_floor(floor, last_floor int) {
 				Println("I am now at floor: ")
 				Println(Get_floor_sensor())
 				time.Sleep(25 * time.Millisecond)
-				last_floor = Get_floor_sensor()
+				last_floor = floor
 				Speed(0)
 				break
 			}
@@ -71,7 +71,10 @@ func main() {
 
 	// Initialize
 	Init()
+	Speed(150)
 	time.Sleep(25 * time.Millisecond)
+	Speed(0)
+	last_floor = Get_floor_sensor()
 
 	go UserInput(ch1)
 	go send_to_floor_2(ch1)
