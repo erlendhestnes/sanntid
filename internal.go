@@ -16,7 +16,6 @@ func wait_for_input(ch1 chan int) {
 		case floor := <-ch1:
 			Set_stop_lamp(0)
 			current_floor = Get_floor_sensor()
-			Set_floor_indicator(current_floor)
 			Println("Going to floor : " + Itoa(floor))
 			Println("From previous floor : " + Itoa(current_floor))
 			send_to_floor(floor, current_floor)
@@ -34,7 +33,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(floor)
+				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
@@ -46,7 +45,7 @@ func send_to_floor(floor, current_floor int) {
 			Speed(-150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(floor)
+				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				Speed(0)
 				break
