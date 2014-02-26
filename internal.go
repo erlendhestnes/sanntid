@@ -17,9 +17,6 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 		select {
 		case floor := <-ch1:
 			Send_to_floor(floor)
-		default:
-			time.Sleep(25 * time.Millisecond)
-		}
 	}
 }
 
@@ -89,6 +86,7 @@ func Order(ch1 chan int) {
 }
 
 func Floor_indicator(last_floor chan int) {
+	Println("executing floor indicator!")
 	for {
 		if Get_floor_sensor() != -1 {
 			Set_floor_indicator(Get_floor_sensor())
