@@ -8,10 +8,11 @@ import (
 )
 
 //Waits for internal and external inputs from elevator control
-func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_order chan string) {
+func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_order, direction chan string) {
 
 	_ = int_order
 	_ = ext_order
+	//_ = last_order
 
 	var floor int
 
@@ -20,7 +21,7 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 		case floor = <-int_button:
 			go Send_to_floor(floor, "int")
 		case floor = <-ext_button:
-			go Send_to_floor(floor, "ext")
+			go Send_to_floor(floor, <-direction)
 		case temp := <-last_order:
 			_ = temp
 			time.Sleep(50 * time.Millisecond)
@@ -47,7 +48,11 @@ func Send_to_floor(floor int, button string) {
 				if button == "int" {
 					Set_button_lamp(BUTTON_COMMAND, floor, 0)
 				} else {
-					Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+					if button == "up" {
+						Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+					} else {
+						Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+					}
 				}
 				return
 			}
@@ -66,7 +71,11 @@ func Send_to_floor(floor int, button string) {
 				if button == "int" {
 					Set_button_lamp(BUTTON_COMMAND, floor, 0)
 				} else {
-					Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+					if button == "up" {
+						Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+					} else {
+						Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+					}
 				}
 				return
 			}
@@ -84,9 +93,10 @@ func KeyboardInput(ch chan int) {
 	}
 }
 
-func Ext_order(int_button chan int) {
+func Ext_order(int_button chan int, direction chan string) {
 
 	i := 0
+
 	for {
 
 		if i < 3 {
@@ -94,6 +104,7 @@ func Ext_order(int_button chan int) {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_UP, i, 1)
 				int_button <- i
+				direction <- "up"
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
@@ -102,12 +113,15 @@ func Ext_order(int_button chan int) {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_DOWN, i, 1)
 				int_button <- i
+				direction <- "down"
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
+
 		i++
 		i = i % 4
 		time.Sleep(25 * time.Millisecond)
+
 	}
 }
 
@@ -156,6 +170,8 @@ func main() {
 	ext_order := make(chan string)
 	last_order := make(chan string)
 
+	direction := make(chan string)
+
 	// Initialize
 	Init()
 	Speed(0)
@@ -163,8 +179,8 @@ func main() {
 
 	go Floor_indicator(last_order)
 	go Int_order(int_button)
-	go Ext_order(ext_button)
-	go Wait_for_input(int_button, ext_button, int_order, ext_order, last_order)
+	go Ext_order(ext_button, direction)
+	go Wait_for_input(int_button, ext_button, int_order, ext_order, last_order, direction)
 
 	neverQuit := make(chan string)
 	<-neverQuit
