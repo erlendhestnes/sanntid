@@ -36,6 +36,7 @@ func Send_to_floor(floor int) {
 				Speed(0)
 				break
 			}
+			time.Sleep(25 * time.Millisecond)
 		}
 	} else {
 		Println("Going down")
@@ -48,6 +49,7 @@ func Send_to_floor(floor int) {
 				Speed(0)
 				break
 			}
+			time.Sleep(25 * time.Millisecond)
 		}
 	}
 }
