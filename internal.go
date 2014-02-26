@@ -21,7 +21,11 @@ func Wait_for_input(int_button, ext_button chan int, int_order, direction chan s
 			Set_button_lamp(BUTTON_COMMAND, floor, 0)
 		case floor = <-ext_button:
 			Send_to_floor(floor)
-			Set_button_lamp(direction, floor, 0)
+			if <-direction == "up" {
+				Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+			} else {
+				Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+			}
 
 		default:
 			time.Sleep(50 * time.Millisecond)
@@ -85,7 +89,7 @@ func Ext_order(int_button chan int, direction chan string) {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_UP, i, 1)
 				int_button <- i
-				direction <- "BUTTON_CALL_UP"
+				direction <- "up"
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
@@ -94,7 +98,7 @@ func Ext_order(int_button chan int, direction chan string) {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_DOWN, i, 1)
 				int_button <- i
-				direction <- "BUTTON_CALL_DOWN"
+				direction <- "down"
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
