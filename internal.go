@@ -17,6 +17,7 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 		select {
 		case floor := <-ch1:
 			Send_to_floor(floor)
+			Set_button_lamp(BUTTON_COMMAND, <-ch1, 0)
 		default:
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -25,6 +26,9 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 
 func Send_to_floor(floor int) {
 	current_floor = Get_floor_sensor()
+	Elev_set_door_open_lamp(0)
+	Set_stop_lamp(0)
+
 	if current_floor < floor {
 		Println("Going up")
 		for {
@@ -32,6 +36,7 @@ func Send_to_floor(floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_stop_lamp(1)
+				Elev_set_door_open_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
@@ -45,6 +50,7 @@ func Send_to_floor(floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_stop_lamp(1)
+				Elev_set_door_open_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
@@ -100,6 +106,7 @@ func Int_order(ch1 chan int) {
 		if Get_button_signal(BUTTON_COMMAND, i) == 1 {
 			//Println("Button nr: " + Itoa(i) + " has been pressed!")
 			ch1 <- i
+			Set_button_lamp(BUTTON_COMMAND, i, 1)
 			time.Sleep(300 * time.Millisecond)
 		}
 
@@ -113,11 +120,12 @@ func Int_order(ch1 chan int) {
 func Floor_indicator(last_floor chan int) {
 	Println("executing floor indicator!")
 	_ = last_floor
+	var floor int
 	for {
-		if Get_floor_sensor() != -1 {
-			Set_floor_indicator(Get_floor_sensor())
-			Println(Get_floor_sensor())
-			//last_floor <- Get_floor_sensor()
+		floor = Get_floor_sensor()
+		if floor != -1 {
+			Set_floor_indicator(floor)
+			//last_floor <- floor
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
