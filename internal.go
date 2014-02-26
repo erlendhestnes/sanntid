@@ -31,7 +31,6 @@ func Send_to_floor(floor int) {
 			Speed(150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
@@ -44,7 +43,6 @@ func Send_to_floor(floor int) {
 			Speed(-150)
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
-				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
@@ -90,6 +88,15 @@ func Order(ch1 chan int) {
 	}
 }
 
+func Floor_indicator() {
+	for {
+		if Get_floor_sensor() != -1 {
+			Set_floor_indicator(Get_floor_sensor())
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
 func main() {
 
 	//channels
@@ -103,6 +110,7 @@ func main() {
 
 	go Order(ch1)
 	go Wait_for_input(ch1, ch2)
+	go Floor_indicator()
 
 	neverQuit := make(chan string)
 	<-neverQuit
