@@ -21,8 +21,8 @@ func Wait_for_input(int_button, ext_button chan int, int_order chan string) {
 			Set_button_lamp(BUTTON_COMMAND, floor, 0)
 		case floor = <-ext_button:
 			Send_to_floor(floor)
-			Set_button_lamp(BUTTON_CALL_UP, floor, 0)
-			Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+			//Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+			//Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
 
 		default:
 			time.Sleep(50 * time.Millisecond)
