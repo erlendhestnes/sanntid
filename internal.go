@@ -1,8 +1,7 @@
-package internal
+package main
 
 import (
 	. "./driver"
-	. "./network"
 	. "fmt"
 	. "strconv"
 	"time"
@@ -18,7 +17,6 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 		select {
 		case floor := <-ch1:
 			Send_to_floor(floor)
-			//ch2 <- GetMyIP() + ":" + Itoa(floor)
 		default:
 			time.Sleep(25 * time.Millisecond)
 		}
@@ -92,7 +90,7 @@ func Order(ch1 chan int) {
 	}
 }
 
-func Internal() {
+func main() {
 
 	//channels
 	ch1 := make(chan int)
