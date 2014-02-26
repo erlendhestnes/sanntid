@@ -114,7 +114,7 @@ func main() {
 
 	go Order(ch1)
 	go Wait_for_input(ch1, ch2)
-	go Floor_indicator()
+	go Floor_indicator(ch3)
 
 	neverQuit := make(chan string)
 	<-neverQuit
