@@ -61,21 +61,21 @@ func KeyboardInput(ch chan int) {
 	}
 }
 
-func Order(ch1 chan int) {
+func Ext_order(ch1 chan int) {
 
 	i := 0
 
 	for {
 
 		if i < 3 {
-			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
+			if Get_button_signal(BUTTON_CALL_UP, i) == 1 {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
 		if i > 0 {
-			if Get_button_signal(BUTTON_COMMAND, i) == 1 {
+			if Get_button_signal(BUTTON_CALL_DOWN, i) == 1 {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
 				ch1 <- i
 				time.Sleep(300 * time.Millisecond)
@@ -89,19 +89,34 @@ func Order(ch1 chan int) {
 	}
 }
 
+func Int_order(ch1 chan int) {
+
+	i := 0
+
+	for {
+
+		if Get_button_signal(BUTTON_COMMAND, i) == 1 {
+			//Println("Button nr: " + Itoa(i) + " has been pressed!")
+			ch1 <- i
+			time.Sleep(300 * time.Millisecond)
+		}
+
+		i++
+		i = i % 4
+		time.Sleep(25 * time.Millisecond)
+
+	}
+}
+
 func Floor_indicator(last_floor chan int) {
 	Println("executing floor indicator!")
 	for {
-		/*
-			if Get_floor_sensor() != -1 {
-				Set_floor_indicator(Get_floor_sensor())
-				Println(Get_floor_sensor())
-				last_floor <- Get_floor_sensor()
-				time.Sleep(25 * time.Millisecond)
-			}
-		*/
-		time.Sleep(100 * time.Millisecond)
-		Println(Get_floor_sensor())
+		if Get_floor_sensor() != -1 {
+			Set_floor_indicator(Get_floor_sensor())
+			Println(Get_floor_sensor())
+			last_floor <- Get_floor_sensor()
+			time.Sleep(25 * time.Millisecond)
+		}
 	}
 }
 
@@ -118,7 +133,7 @@ func main() {
 	Set_stop_lamp(1)
 
 	go Floor_indicator(ch3)
-	go Order(ch1)
+	go Int_order(ch1)
 	go Wait_for_input(ch1, ch2)
 
 	neverQuit := make(chan string)
