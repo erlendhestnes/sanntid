@@ -154,7 +154,7 @@ func main() {
 	go Floor_indicator(last_order)
 	go Int_order(int_button)
 	go Ext_order(ext_button)
-	go Wait_for_input(int_button, int_order)
+	go Wait_for_input(int_button, ext_button, int_order)
 
 	neverQuit := make(chan string)
 	<-neverQuit
