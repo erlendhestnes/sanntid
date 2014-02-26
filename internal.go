@@ -97,6 +97,7 @@ func Floor_indicator(last_floor chan int) {
 			time.Sleep(25 * time.Millisecond)
 		}
 		time.Sleep(100 * time.Millisecond)
+		Println(Get_floor_sensor())
 	}
 }
 
