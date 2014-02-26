@@ -9,15 +9,20 @@ import (
 
 var current_floor int
 
-func Wait_for_input(ch1 chan int, ch2 chan string) {
+func Wait_for_input(int_button chan int, int_order chan string) {
 
-	_ = ch2
+	_ = int_order
+	var floor int
 
 	for {
 		select {
-		case floor := <-ch1:
+		case floor = <-int_button:
 			Send_to_floor(floor)
 			Set_button_lamp(BUTTON_COMMAND, floor, 0)
+		case floor = <-ext_button:
+			Send_to_floor(floor)
+			Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+
 		default:
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -69,7 +74,7 @@ func KeyboardInput(ch chan int) {
 	}
 }
 
-func Ext_order(ch1 chan int) {
+func Ext_order(int_button chan int) {
 
 	i := 0
 
@@ -78,14 +83,14 @@ func Ext_order(ch1 chan int) {
 		if i < 3 {
 			if Get_button_signal(BUTTON_CALL_UP, i) == 1 {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
-				ch1 <- i
+				int_button <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
 		if i > 0 {
 			if Get_button_signal(BUTTON_CALL_DOWN, i) == 1 {
 				//Println("Button nr: " + Itoa(i) + " has been pressed!")
-				ch1 <- i
+				int_button <- i
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
@@ -97,7 +102,7 @@ func Ext_order(ch1 chan int) {
 	}
 }
 
-func Int_order(ch1 chan int) {
+func Int_order(int_button chan int) {
 
 	i := 0
 
@@ -105,7 +110,7 @@ func Int_order(ch1 chan int) {
 
 		if Get_button_signal(BUTTON_COMMAND, i) == 1 {
 			//Println("Button nr: " + Itoa(i) + " has been pressed!")
-			ch1 <- i
+			int_button <- i
 			Set_button_lamp(BUTTON_COMMAND, i, 1)
 			time.Sleep(300 * time.Millisecond)
 		}
@@ -117,7 +122,7 @@ func Int_order(ch1 chan int) {
 	}
 }
 
-func Floor_indicator(last_floor chan int) {
+func Floor_indicator(last_floor chan string) {
 	Println("executing floor indicator!")
 	_ = last_floor
 	var floor int
@@ -134,18 +139,22 @@ func Floor_indicator(last_floor chan int) {
 func main() {
 
 	//channels
-	ch1 := make(chan int)
-	ch2 := make(chan string)
-	ch3 := make(chan int)
+	int_button := make(chan int)
+	ext_button := make(chan int)
+
+	int_order := make(chan string)
+	ext_order := make(chan string)
+	last_order := make(chan string)
 
 	// Initialize
 	Init()
 	Speed(0)
 	Set_stop_lamp(1)
 
-	go Floor_indicator(ch3)
-	go Int_order(ch1)
-	go Wait_for_input(ch1, ch2)
+	go Floor_indicator(last_order)
+	go Int_order(int_button)
+	go Ext_order(ext_button)
+	go Wait_for_input(int_button, int_order)
 
 	neverQuit := make(chan string)
 	<-neverQuit
