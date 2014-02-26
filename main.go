@@ -1,6 +1,7 @@
 package main
 
 import (
+	//. "./algorithm"
 	. "./lift"
 	. "./messages"
 	. "./network"
