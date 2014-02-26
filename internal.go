@@ -91,12 +91,14 @@ func Order(ch1 chan int) {
 func Floor_indicator(last_floor chan int) {
 	Println("executing floor indicator!")
 	for {
-		if Get_floor_sensor() != -1 {
-			Set_floor_indicator(Get_floor_sensor())
-			Println(Get_floor_sensor())
-			last_floor <- Get_floor_sensor()
-			time.Sleep(25 * time.Millisecond)
-		}
+		/*
+			if Get_floor_sensor() != -1 {
+				Set_floor_indicator(Get_floor_sensor())
+				Println(Get_floor_sensor())
+				last_floor <- Get_floor_sensor()
+				time.Sleep(25 * time.Millisecond)
+			}
+		*/
 		time.Sleep(100 * time.Millisecond)
 		Println(Get_floor_sensor())
 	}
