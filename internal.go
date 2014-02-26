@@ -12,7 +12,6 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 
 	_ = int_order
 	_ = ext_order
-	//_ = last_order
 
 	var floor int
 
