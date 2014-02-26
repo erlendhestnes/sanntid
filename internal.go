@@ -143,7 +143,7 @@ func main() {
 	ext_button := make(chan int)
 
 	int_order := make(chan string)
-	ext_order := make(chan string)
+	//ext_order := make(chan string)
 	last_order := make(chan string)
 
 	// Initialize
