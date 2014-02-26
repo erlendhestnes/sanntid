@@ -1,6 +1,7 @@
 package main
 
 import (
+	. "./lift"
 	. "./messages"
 	. "./network"
 	. "./network/tcp"
@@ -23,8 +24,13 @@ func main() {
 
 	array_update := make(chan int)
 	get_array := make(chan []int)
+	new_master := make(chan bool)
 	flush := make(chan bool)
 	master := make(chan bool)
+
+	int_button := make(chan int)
+	int_order := make(chan string)
+	ext_order := make(chan string)
 
 	go IP_array(array_update, get_array, flush)
 	// Println("Starter IP_array...")
@@ -38,25 +44,18 @@ func main() {
 		go UDP_listen(array_update)
 		// Println("Starter UDP_listen...")
 	} else { // SLAVE
+		go Internal(int_button, int_order, ext_order)
 		// Println("slave")
 		go IMA(BROADCAST, UDP_PORT, master, get_array)
 		// Println("Starter IMA...")
 		master <- false
 		go UDP_listen(array_update)
 		// Println("Starter UDP_listen...")
-		go IMA_master(get_array, master)
+		go IMA_master(get_array, master, new_master)
 		// Println("Starter IMA_master...")
-		go Connect_to_MASTER(get_array, UDP_PORT)
+		go Connect_to_MASTER(get_array, UDP_PORT, new_master, int_order, ext_order)
+		new_master <- true
 	}
-
-	/*for {
-		select {
-
-		case msg := <-get_array:
-			Println(msg)
-			time.Sleep(150 * time.Millisecond)
-		}
-	}*/
 
 	neverQuit := make(chan string)
 	<-neverQuit

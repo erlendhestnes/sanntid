@@ -1,7 +1,8 @@
-package main
+package internal
 
 import (
-	. "./driver"
+	. ".././driver"
+	. ".././network"
 	. "fmt"
 	. "strconv"
 	"time"
@@ -10,20 +11,17 @@ import (
 //Waits for internal and external inputs from elevator control
 func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_order, direction chan string) {
 
-	_ = int_order
-	_ = ext_order
-	//_ = last_order
-
 	var floor int
 
 	for {
 		select {
 		case floor = <-int_button:
-			go Send_to_floor(floor, "int")
+			int_order <- Itoa(floor) + ":" + GetMyIP()
 		case floor = <-ext_button:
-			go Send_to_floor(floor, <-direction)
+			dir := <-direction
+			ext_order <- Itoa(floor) + ":" + dir
 		case temp := <-last_order:
-			_ = temp
+			last_order <- Itoa(temp) + ":" + GetMyIP()
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
@@ -84,6 +82,7 @@ func Send_to_floor(floor int, button string) {
 	}
 }
 
+//Keyboard terminal input (For testing)
 func KeyboardInput(ch chan int) {
 	var a int
 
@@ -93,6 +92,7 @@ func KeyboardInput(ch chan int) {
 	}
 }
 
+//Handles external button presses
 func Ext_order(int_button chan int, direction chan string) {
 
 	i := 0
@@ -125,6 +125,7 @@ func Ext_order(int_button chan int, direction chan string) {
 	}
 }
 
+//Handles internal button presses
 func Int_order(int_button chan int) {
 
 	i := 0
@@ -143,6 +144,7 @@ func Int_order(int_button chan int) {
 	}
 }
 
+//Checks which floor the elevator is on and sets the floor-light
 func Floor_indicator(last_order chan string) {
 	Println("executing floor indicator!")
 	//_ = last_order
@@ -158,7 +160,17 @@ func Floor_indicator(last_order chan string) {
 	}
 }
 
-func main() {
+func To_nearest_floor() {
+	for {
+		Speed(150)
+		if Get_floor_sensor() != -1 {
+			time.Sleep(25 * time.Millisecond)
+			Speed(0)
+		}
+	}
+}
+
+func Internal() {
 
 	//channels
 	int_button := make(chan int)

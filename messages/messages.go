@@ -12,25 +12,19 @@ func IP_array(array_update chan int, get_array chan []int, flush chan bool) {
 
 	IPaddresses := []int{}
 	// Println("IP_array startet..!")
-
 	for {
-
 		select {
 		case ip := <-array_update:
-
 			// Println("Oppdaterte arrayet..!")
 			IPaddresses = AppendIfMissing(IPaddresses, ip)
 			sort.Ints(IPaddresses)
-
 		case get_array <- IPaddresses:
 			// Println("Noen leste arrayet..!")
-
 		case msg := <-flush:
 			// Println("Tømte arrayet..!")
 			_ = msg
 			IPaddresses = IPaddresses[:0]
 		}
-
 	}
 }
 
@@ -47,7 +41,6 @@ func AppendIfMissing(slice []int, i int) []int {
 func Timer(flush chan bool) {
 
 	// Println("Timer startet..!")
-
 	for {
 		for timer := range time.Tick(2 * time.Second) {
 			_ = timer
@@ -57,13 +50,11 @@ func Timer(flush chan bool) {
 	}
 }
 
-func IMA_master(get_array chan []int, master chan bool) {
+func IMA_master(get_array chan []int, master, new_master chan bool) {
 
 	// Println("IMA_master startet..!")
 	count := 0
-
 	for {
-
 		time.Sleep(500 * time.Millisecond)
 		array := <-get_array
 		// Println("Got array: ", array)
@@ -72,10 +63,12 @@ func IMA_master(get_array chan []int, master chan bool) {
 				temp, _ := Atoi(GetMyIP())
 				if temp == array[0] {
 					count++
-					if count == 3 { // SIKKERTHETSGRAD!
+					if count == 2 { // SIKKERTHETSGRAD!
 						// Println("Sender master request...")
 						Println("MASTER forsvant..!")
 						master <- true
+						time.Sleep(50 * time.Microsecond)
+						new_master <- true
 					}
 				}
 			} else {

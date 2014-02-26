@@ -3,7 +3,7 @@ package udp
 import (
 	. "../.././network"
 	. ".././tcp"
-	. "fmt" // temp
+	. "fmt"
 	. "net"
 	. "strconv"
 	"time"
@@ -29,19 +29,17 @@ func IMA(address, port string, master chan bool, get_array chan []int) {
 		select {
 		case state := <-master:
 			if state {
-				go TCP_echo()
+				go TCP_listen()
 				// Println("Satte masterIP..!")
 				Println("Ble MASTER..!")
 				temp, _ := Atoi(GetMyIP())
 				temp = temp + 255
 				myIP = Itoa(temp) // master IP
 			} else {
+				// go TCP_listen(false)
 				// Println("Starter GetMyIP...")
 				Println("Ble SLAVE..!")
 				myIP = GetMyIP()
-
-				// Her kan vi godt gjøre oppkoblingen av TCP: Fra slave til master
-				// go Connect_to_MASTER(get_array, TCP_PORT)
 			}
 		default:
 			time.Sleep(100 * time.Millisecond)
@@ -54,7 +52,6 @@ func IMA(address, port string, master chan bool, get_array chan []int) {
 func UDP_listen(array_update chan int) {
 
 	// Println("UDP_listen startet..!")
-
 	saddr, _ := ResolveUDPAddr("udp", UDP_PORT)
 	ln, _ := ListenUDP("udp", saddr)
 

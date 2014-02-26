@@ -1,106 +1,74 @@
 package tcp
 
 import (
+	. "../.././lift"
 	. "../.././network"
-	// . "fmt" // temp
+	. "fmt"
 	. "net"
-	"os"
 	. "strconv"
 	"time"
 )
 
-func TCP_Send(conn Conn, msg string) {
-
-	time.Sleep(1100 * time.Millisecond)
-	_, err := conn.Write([]byte(msg))
-	_ = err
-}
-
-func TCP_read(conn Conn) {
-
-	b := make([]byte, 1024)
-	for {
-		conn.Read(b)
-	}
-}
-
-func TCP_echo() {
-
-	println("Starting the server")
-
-	listener, err := Listen("tcp", TCP_PORT)
-	if err != nil {
-		println("error listening:", err.Error())
-		os.Exit(1)
-	}
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			println("Error accept:", err.Error())
-			return
-		}
-		go EchoFunc(conn)
-	}
-
-}
-
-func EchoFunc(conn Conn) {
-	buf := make([]byte, RECV_BUF_LEN)
-	n, err := conn.Read(buf)
-	if err != nil {
-		println("Error reading:", err.Error())
-		return
-	}
-	println("received ", n, " bytes of data =", string(buf))
-
-	//send reply
-	_, err = conn.Write(buf)
-	if err != nil {
-		println("Error send reply:", err.Error())
-	} else {
-		println("Reply sent")
-	}
-}
-
-func MASTER_TCP_read() {
+func TCP_listen() {
 
 	ln, _ := Listen("tcp", TCP_PORT)
-
 	for {
 
-		time.Sleep(500 * time.Millisecond)
 		conn, _ := ln.Accept()
-		_ = conn
-
-		go TCP_echo()
+		go TCP_echo(conn)
 	}
 }
 
-func TCP_connect(address, port string) {
-
-	conn, _ := Dial("tcp", address+port)
+func TCP_echo(conn Conn) {
 
 	for {
-
-		b := make([]byte, 1024)
-		_, err := conn.Read(b)
-
-		_, err = conn.Write([]byte("Er du på TCP, MASTER?\x00"))
-		_ = err
+		b := make([]byte, BUF_LEN)
+		conn.Read(b)
+		Println(string(b))
+		conn.Write(b)
 	}
 }
 
-func Connect_to_MASTER(get_array chan []int, port string) {
+func TCP_slave(conn Conn) {
+
+	for {
+		b := make([]byte, BUF_LEN)
+		conn.Read(b)
+		Println(string(b))
+		msg, _ := Atoi(string(b[0]))
+		Println(msg)
+		Send_to_floor(msg)
+	}
+}
+
+func TCP_connect(master_ip string, int_order, ext_order chan string) {
+
+	conn, _ := Dial("tcp", IP_BASE+master_ip+TCP_PORT)
+	go TCP_slave(conn)
+	time.Sleep(time.Second)
+	for {
+		b := make([]byte, BUF_LEN)
+		select {
+		case msg := <-int_order:
+			b = []byte(msg)
+		case msg := <-ext_order:
+			b = []byte(msg)
+		}
+		conn.Write(b)
+	}
+}
+
+func Connect_to_MASTER(get_array chan []int, port string, new_master chan bool, int_order, ext_order chan string) {
 
 	for {
 		select {
-		case ip := <-get_array:
+		case <-new_master:
+			time.Sleep(time.Second)
+			ip := <-get_array
 			if len(ip) != 0 {
 				if ip[len(ip)-1] > 255 {
 					master_ip := ip[len(ip)-1] - 255
-					go TCP_connect(IP_BASE+Itoa(master_ip), TCP_PORT)
-					break
+					go TCP_connect(Itoa(master_ip), int_order, ext_order)
 				}
 			}
 		default:
