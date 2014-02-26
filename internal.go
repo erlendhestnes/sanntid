@@ -160,8 +160,6 @@ func main() {
 	ext_order := make(chan string)
 	last_order := make(chan string)
 
-	direction := make(chan string)
-
 	// Initialize
 	Init()
 	Speed(0)
