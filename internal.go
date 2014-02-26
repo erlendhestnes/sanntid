@@ -26,7 +26,7 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 
 func Send_to_floor(floor int) {
 	current_floor = Get_floor_sensor()
-	Elev_set_door_open_lamp(0)
+	//Elev_set_door_open_lamp(0)
 	Set_stop_lamp(0)
 
 	if current_floor < floor {
@@ -36,7 +36,7 @@ func Send_to_floor(floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_stop_lamp(1)
-				Elev_set_door_open_lamp(1)
+				//Elev_set_door_open_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
@@ -50,7 +50,7 @@ func Send_to_floor(floor int) {
 			if Get_floor_sensor() == floor {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_stop_lamp(1)
-				Elev_set_door_open_lamp(1)
+				//Elev_set_door_open_lamp(1)
 				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
