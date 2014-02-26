@@ -1,4 +1,4 @@
-package internal
+package lift
 
 import (
 	. ".././driver"
@@ -170,17 +170,7 @@ func To_nearest_floor() {
 	}
 }
 
-func Internal() {
-
-	//channels
-	int_button := make(chan int)
-	ext_button := make(chan int)
-
-	int_order := make(chan string)
-	ext_order := make(chan string)
-	last_order := make(chan string)
-
-	direction := make(chan string)
+func Internal(int_button, ext_button chan int, int_order, ext_order, last_order, direction chan string) {
 
 	// Initialize
 	Init()
