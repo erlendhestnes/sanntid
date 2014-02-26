@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	. "./driver"
@@ -10,21 +10,23 @@ import (
 
 var current_floor int
 
-func wait_for_input(ch1 chan int, ch2 chan string) {
+func Wait_for_input(ch1 chan int, ch2 chan string) {
+
+	_ = ch2
 
 	for {
 		select {
 		case floor := <-ch1:
-			current_floor = Get_floor_sensor()
-			ch2 <- Itoa(floor) + ":" + GetMyIP()
+			Send_to_floor(floor)
+			//ch2 <- GetMyIP() + ":" + Itoa(floor)
 		default:
 			time.Sleep(25 * time.Millisecond)
 		}
 	}
-
 }
 
-func send_to_floor(floor, current_floor int) {
+func Send_to_floor(floor int) {
+	current_floor = Get_floor_sensor()
 	if current_floor < floor {
 		Println("Going up")
 		for {
@@ -33,6 +35,7 @@ func send_to_floor(floor, current_floor int) {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
+				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -45,6 +48,7 @@ func send_to_floor(floor, current_floor int) {
 				Println("I am now at floor: " + Itoa(Get_floor_sensor()))
 				Set_floor_indicator(Get_floor_sensor())
 				Set_stop_lamp(1)
+				time.Sleep(25 * time.Millisecond)
 				Speed(0)
 				break
 			}
@@ -61,7 +65,7 @@ func KeyboardInput(ch chan int) {
 	}
 }
 
-func order(ch1 chan int) {
+func Order(ch1 chan int) {
 
 	i := 0
 
@@ -88,7 +92,7 @@ func order(ch1 chan int) {
 	}
 }
 
-func main() {
+func Internal() {
 
 	//channels
 	ch1 := make(chan int)
@@ -99,8 +103,8 @@ func main() {
 	Speed(0)
 	Set_stop_lamp(1)
 
-	go order(ch1)
-	go wait_for_input(ch1, ch2)
+	go Order(ch1)
+	go Wait_for_input(ch1, ch2)
 
 	neverQuit := make(chan string)
 	<-neverQuit
