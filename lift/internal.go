@@ -21,7 +21,8 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 			dir := <-direction
 			ext_order <- Itoa(floor) + ":" + dir
 		case temp := <-last_order:
-			last_order <- Itoa(temp) + ":" + GetMyIP()
+			_ = temp
+			//last_order <- Itoa(temp) + ":" + GetMyIP()
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
