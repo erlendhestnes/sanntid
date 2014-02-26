@@ -9,7 +9,7 @@ import (
 
 var current_floor int
 
-func Wait_for_input(int_button, ext_button, last_order chan int, int_order, ext_order, last_order, direction chan string) {
+func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_order, direction chan string) {
 
 	_ = int_order
 	_ = ext_order
