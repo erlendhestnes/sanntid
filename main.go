@@ -29,13 +29,8 @@ func main() {
 	master := make(chan bool)
 
 	int_button := make(chan int)
-	ext_button := make(chan int)
-
 	int_order := make(chan string)
 	ext_order := make(chan string)
-	last_order := make(chan string)
-
-	direction := make(chan string)
 
 	go IP_array(array_update, get_array, flush)
 	// Println("Starter IP_array...")
@@ -49,7 +44,7 @@ func main() {
 		go UDP_listen(array_update)
 		// Println("Starter UDP_listen...")
 	} else { // SLAVE
-		go Internal(int_button, ext_button, int_order, ext_order, last_order, direction)
+		go Internal(int_button, int_order, ext_order)
 		// Println("slave")
 		go IMA(BROADCAST, UDP_PORT, master, get_array)
 		// Println("Starter IMA...")
