@@ -37,7 +37,7 @@ func TCP_slave(conn Conn) {
 		Println(string(b))
 		msg, _ := Atoi(string(b[0]))
 		Println(msg)
-		Send_to_floor(msg)
+		Send_to_floor(msg, "int")
 	}
 }
 
