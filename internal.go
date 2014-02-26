@@ -16,7 +16,7 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 	for {
 		select {
 		case floor := <-ch1:
-			go Send_to_floor(floor)
+			Send_to_floor(floor)
 		default:
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -84,6 +84,7 @@ func Order(ch1 chan int) {
 
 		i++
 		i = i % 4
+		time.Sleep(25 * time.Millisecond)
 
 	}
 }
