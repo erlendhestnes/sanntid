@@ -19,9 +19,9 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 	for {
 		select {
 		case floor = <-int_button:
-			go Send_to_floor(floor)
+			go Send_to_floor(floor, "int")
 		case floor = <-ext_button:
-			go Send_to_floor(floor)
+			go Send_to_floor(floor, "ext")
 		case temp := <-last_order:
 			_ = temp
 			time.Sleep(50 * time.Millisecond)
