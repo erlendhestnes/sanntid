@@ -101,7 +101,7 @@ func Ext_order(int_button chan int, direction chan string) {
 
 		if i < 3 {
 			if Get_button_signal(BUTTON_CALL_UP, i) == 1 {
-				//Println("Button nr: " + Itoa(i) + " has been pressed!")
+				Println("External call up button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_UP, i, 1)
 				int_button <- i
 				direction <- "up"
@@ -110,7 +110,7 @@ func Ext_order(int_button chan int, direction chan string) {
 		}
 		if i > 0 {
 			if Get_button_signal(BUTTON_CALL_DOWN, i) == 1 {
-				//Println("Button nr: " + Itoa(i) + " has been pressed!")
+				Println("External call down button nr: " + Itoa(i) + " has been pressed!")
 				Set_button_lamp(BUTTON_CALL_DOWN, i, 1)
 				int_button <- i
 				direction <- "down"
@@ -128,11 +128,9 @@ func Ext_order(int_button chan int, direction chan string) {
 func Int_order(int_button chan int) {
 
 	i := 0
-
 	for {
-
 		if Get_button_signal(BUTTON_COMMAND, i) == 1 {
-			//Println("Button nr: " + Itoa(i) + " has been pressed!")
+			Println("Internal button nr: " + Itoa(i) + " has been pressed!")
 			int_button <- i
 			Set_button_lamp(BUTTON_COMMAND, i, 1)
 			time.Sleep(300 * time.Millisecond)
