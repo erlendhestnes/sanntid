@@ -9,7 +9,7 @@ import (
 
 var current_floor int
 
-func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, direction chan string) {
+func Wait_for_input(int_button, ext_button, last_order chan int, int_order, ext_order, last_order, direction chan string) {
 
 	_ = int_order
 	_ = ext_order
@@ -28,6 +28,10 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, direc
 			} else {
 				Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
 			}
+		case temp := <- last_order
+			Println(temp)
+		default:
+			time.Sleep(50 * time.Millisecond)
 		}
 	}
 }
@@ -131,15 +135,16 @@ func Int_order(int_button chan int) {
 
 func Floor_indicator(last_order chan string) {
 	Println("executing floor indicator!")
-	_ = last_order
+	//_ = last_order
 	var floor int
 	for {
 		floor = Get_floor_sensor()
 		if floor != -1 {
 			Set_floor_indicator(floor)
-			//last_order <- floor
+			last_order <- Itoa(floor)
 			time.Sleep(50 * time.Millisecond)
 		}
+		time.Sleep(25 * time.Millisecond)
 	}
 }
 
@@ -163,7 +168,7 @@ func main() {
 	go Floor_indicator(last_order)
 	go Int_order(int_button)
 	go Ext_order(ext_button, direction)
-	go Wait_for_input(int_button, ext_button, int_order, ext_order, direction)
+	go Wait_for_input(int_button, ext_button, int_order, ext_order, last_order, direction)
 
 	neverQuit := make(chan string)
 	<-neverQuit
