@@ -13,7 +13,7 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 
 	_ = int_order
 	_ = ext_order
-	_ = last_order
+	//_ = last_order
 
 	var floor int
 
@@ -29,9 +29,8 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 			} else {
 				Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
 			}
-		default:
+		case temp := <-last_order:
 			time.Sleep(50 * time.Millisecond)
-		}
 	}
 }
 
@@ -134,13 +133,13 @@ func Int_order(int_button chan int) {
 
 func Floor_indicator(last_order chan string) {
 	Println("executing floor indicator!")
-	_ = last_order
+	//_ = last_order
 	var floor int
 	for {
 		floor = Get_floor_sensor()
 		if floor != -1 {
 			Set_floor_indicator(floor)
-			//last_order <- Itoa(floor)
+			last_order <- Itoa(floor)
 			time.Sleep(50 * time.Millisecond)
 		}
 		time.Sleep(25 * time.Millisecond)
