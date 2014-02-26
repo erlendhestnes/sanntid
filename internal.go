@@ -47,7 +47,7 @@ func Send_to_floor(floor int, button string) {
 				if button == "int" {
 					Set_button_lamp(BUTTON_COMMAND, floor, 0)
 				} else {
-					Set_button_lamp(BUTTON_CALL_UP, floor, 0)
+					Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
 				}
 				return
 			}
@@ -66,7 +66,7 @@ func Send_to_floor(floor int, button string) {
 				if button == "int" {
 					Set_button_lamp(BUTTON_COMMAND, floor, 0)
 				} else {
-					Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
+					Set_button_lamp(BUTTON_CALL_UP, floor, 0)
 				}
 				return
 			}
