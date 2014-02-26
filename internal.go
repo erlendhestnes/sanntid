@@ -17,7 +17,7 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 		select {
 		case floor := <-ch1:
 			Send_to_floor(floor)
-			Set_button_lamp(BUTTON_COMMAND, <-ch1, 0)
+			Set_button_lamp(BUTTON_COMMAND, floor, 0)
 		default:
 			time.Sleep(50 * time.Millisecond)
 		}
