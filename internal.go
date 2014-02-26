@@ -30,6 +30,7 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 				Set_button_lamp(BUTTON_CALL_DOWN, floor, 0)
 			}
 		case temp := <-last_order:
+			_ = temp
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
