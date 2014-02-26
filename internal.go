@@ -87,7 +87,6 @@ func KeyboardInput(ch chan int) {
 func Ext_order(int_button chan int) {
 
 	i := 0
-
 	for {
 
 		if i < 3 {
@@ -106,11 +105,9 @@ func Ext_order(int_button chan int) {
 				time.Sleep(300 * time.Millisecond)
 			}
 		}
-
 		i++
 		i = i % 4
 		time.Sleep(25 * time.Millisecond)
-
 	}
 }
 
