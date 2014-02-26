@@ -31,6 +31,7 @@ func Wait_for_input(int_button, ext_button chan int, int_order, ext_order, last_
 			}
 		case temp := <-last_order:
 			time.Sleep(50 * time.Millisecond)
+		}
 	}
 }
 
