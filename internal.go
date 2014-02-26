@@ -17,6 +17,8 @@ func Wait_for_input(ch1 chan int, ch2 chan string) {
 		select {
 		case floor := <-ch1:
 			Send_to_floor(floor)
+		default:
+			time.Sleep(50 * time.Millisecond)
 		}
 	}
 }
